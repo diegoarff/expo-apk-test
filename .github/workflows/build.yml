@@ -16,14 +16,18 @@ jobs:
      uses: actions/setup-node@v3
      with:
        node-version: '18.x'
-       cache: npm
-       cache-dependency-path: ./package-lock.json
+       cache: bun
+       
+   - name: Install bun
+     uses: oven-sh/setup-bun@v1
+     with:
+      bun-version: latest
   
    - name: Install dependencies
-     run: npm install
+     run: bun install
   
    - name: Install EAS CLI
-     run: npm install -g eas-cli
+     run: bun add -g eas-cli
   
    - name: Create .env file
      run: |
