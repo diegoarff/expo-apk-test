@@ -1,0 +1,53 @@
+name: Build Android with EAS
+
+on:
+ push:
+   branches: [ main ]
+
+jobs:
+ build:
+   name: EAS Build Android
+   runs-on: macos-latest
+   steps:
+   - name: Checkout repository
+     uses: actions/checkout@v3
+   
+   - name: Setup Node.js
+     uses: actions/setup-node@v3
+     with:
+       node-version: '18.x'
+       cache: npm
+       cache-dependency-path: ./package-lock.json
+  
+   - name: Install dependencies
+     run: npm install
+  
+   - name: Install EAS CLI
+     run: npm install -g eas-cli
+  
+   - name: Create .env file
+     run: |
+       echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> .env
+       cat .env  # Optional: Print the contents of .env for debugging
+  
+  
+   - name: Build Android with EAS
+     run: eas build --platform android --local --profile preview
+  
+  
+   - name: Find APK file
+     id: find_apk
+     run: |
+       APK_PATH=$(find . -name "*.apk" -print0 | head -z -n 1)
+       if [ -z "$APK_PATH" ]; then
+       echo "APK not found"
+       exit 1
+       fi
+       echo "APK_PATH=$APK_PATH" >> $GITHUB_OUTPUT
+  
+  
+   - name: Upload APK as artifact
+     uses: actions/upload-artifact@v3
+     with:
+       name: android-apk
+       path: ${{ steps.find_apk.outputs.APK_PATH }}
