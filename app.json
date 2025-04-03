@@ -41,6 +41,14 @@
             "enforceNavigationBarContrast": false
           }
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "sentry-test",
+          "organization": "binwus"
+        }
       ]
     ],
     "experiments": {
