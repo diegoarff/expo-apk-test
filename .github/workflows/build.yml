@@ -47,7 +47,7 @@ jobs:
   
   
    - name: Upload APK as artifact
-     uses: actions/upload-artifact@v3
+     uses: actions/upload-artifact@v4.6.2
      with:
        name: android-apk
        path: ${{ steps.find_apk.outputs.APK_PATH }}
